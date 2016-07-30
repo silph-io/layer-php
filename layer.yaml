@@ -1,0 +1,3 @@
+includes:
+ - 'layer:basic'
+ - 'interface:php-fpm-stats'

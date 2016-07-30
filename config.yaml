@@ -1,0 +1,21 @@
+options:
+  php-max-children:
+    description: Number of 'pm.max_children' for fpm"
+    type: int
+    default: 250
+  php-start-servers:
+    description: Number of 'pm.start_servers' for fpm"
+    type: int
+    default: 175
+  php-min-spare-servers:
+    description: Number of 'pm.min_spare_servers' for fpm"
+    type: int
+    default: 150
+  php-max-spare-servers:
+    description: Number of 'pm.min_spare_servers' for fpm"
+    type: int
+    default: 200
+  php-max-requests:
+    description: "Number of 'pm.max_requests' before restarting server"
+    type: int
+    default: 2500
