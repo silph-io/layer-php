@@ -1,6 +1,7 @@
 name: php-fpm
 summary: server-side, HTML-embedded scripting language
-maintainer: Marco Ceppi <marco@ceppi.net>
+maintainers:
+ - Marco Ceppi <marco@ceppi.net>
 description: |
   This package provides the Fast Process Manager interpreter that runs as
   a daemon and receives Fast/CGI requests.  PHP (recursive acronym for
@@ -10,6 +11,9 @@ description: |
   dependency package, which depends on Debian's default PHP version.
 tags:
   - php
+series:
+  - xenial
+  - trusty
 provides:
   stats:
     interface: php-fpm-stats

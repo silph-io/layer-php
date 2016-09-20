@@ -1,3 +1,9 @@
 includes:
  - 'layer:basic'
+ - 'layer:apt'
  - 'interface:php-fpm-stats'
+defines:
+  packages:
+    type: array
+    default: []
+    description: PHP packages to be installed from archive

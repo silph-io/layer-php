@@ -1,7 +1,9 @@
 
+
 import unittest
 
 from mock import patch, MagicMock, call
+
 from reactive import php_fpm  # noqa: E402
 
 
@@ -46,7 +48,7 @@ class ReactiveTest(ReactiveTestCase):
         }
 
         mp.configure.return_value = False
-        php_fpm.install_phpfpm()
+        php_fpm.configure()
         mp.configure.assert_called_with({
             'pm.max_children': '10',
             'pm.start_servers': '5',
@@ -67,7 +69,7 @@ class ReactiveTest(ReactiveTestCase):
         }
 
         mp.configure.return_value = True
-        php_fpm.install_phpfpm()
+        php_fpm.configure()
         mp.configure.assert_called_with({
             'pm.max_children': '10',
             'pm.start_servers': '5',
@@ -80,5 +82,5 @@ class ReactiveTest(ReactiveTestCase):
         ])
 
     def test_configure(self):
-        php_fpm.configure_phpfpm()
+        php_fpm.change_config()
         self.remove_state_mock.assert_called_with('php.configured')

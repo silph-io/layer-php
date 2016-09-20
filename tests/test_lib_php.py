@@ -1,6 +1,7 @@
 
 import sys
 import unittest
+
 from mock import patch
 
 sys.path.append('lib')
@@ -104,3 +105,14 @@ listen = 10.0.0.1:9000
         mv.return_value = ['99', '9', '9000']
         self.assertEqual(['php99-mcrypt', 'php99-mysql'],
                          php.install('mcrypt', 'mysql'))
+
+    @patch('charms.layer.php.lsb_release')
+    def test_package(self, ml):
+        ml.return_value = {'DISTRIB_CODENAME': 'xenial'}
+        self.assertEqual('php-fpm', php.package())
+
+        ml.return_value = {'DISTRIB_CODENAME': 'trusty'}
+        self.assertEqual('php5-fpm', php.package())
+
+        ml.return_value = {'DISTRIB_CODENAME': 'debian'}
+        self.assertEqual('php5-fpm', php.package())

@@ -1,9 +1,15 @@
 
 import os
 import re
+import apt
 import subprocess
 
-from charmhelpers.core.host import service_restart
+from charmhelpers import fetch
+
+from charmhelpers.core.host import (
+    service_restart,
+    lsb_release,
+)
 
 
 FPM_PATH = {
@@ -17,12 +23,8 @@ FPM_BIN = {
 }
 
 PACKAGES = {
-    'xenial': [
-        'php-fpm',
-    ],
-    'trusty': [
-        'php5-fpm',
-    ],
+    'xenial': ['php-fpm', 'php-cli'],
+    'trusty': ['php5-fpm', 'php5-cli'],
 }
 
 PREFIX = {
@@ -38,15 +40,15 @@ def _as_text(bytestring):
 
 def _read_cfg():
     cfg_file = os.path.join(FPM_PATH[version()[0]], 'www.conf')
-    with open(cfg_file) as f:
-        return f.read()
+    with open(cfg_file, 'rb') as f:
+        return f.read().decode('utf-8')
 
 
 def _write_cfg(contents):
     cfg_file = os.path.join(FPM_PATH[version()[0]], 'www.conf')
-    with open(cfg_file, 'w') as f:
+    with open(cfg_file, 'wb') as f:
         f.truncate()  # clear the contents just to be safe
-        f.write(contents)
+        f.write(contents.encode('utf-8'))
 
 
 def configure(cfg):
@@ -64,6 +66,11 @@ def configure(cfg):
     _write_cfg(new)
 
     return changed
+
+
+def package():
+    rel = lsb_release()['DISTRIB_CODENAME']
+    return PACKAGES.get(rel, 'php5-fpm')
 
 
 def socket():
@@ -100,5 +107,7 @@ def run(cmd):
 
 def install(*modules):
     tpl = PREFIX.get(version()[0], 'php-{}')
-    packages = [tpl.format(module) for module in modules]
-    return packages
+    cache = apt.Cache()
+    package_names = [tpl.format(module) for module in modules]
+    packages = [p for p in package_names if p in cache]
+    fetch.apt_install(packages, fatal=True)
