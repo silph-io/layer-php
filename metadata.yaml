@@ -11,9 +11,6 @@ description: |
   dependency package, which depends on Debian's default PHP version.
 tags:
   - php
-series:
-  - xenial
-  - trusty
 provides:
   stats:
     interface: php-fpm-stats
